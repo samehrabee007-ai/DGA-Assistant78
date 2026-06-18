@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import PdfUpload from './components/PdfUpload';
 import TransformerTracker from './pages/TransformerTracker';
 import Thresholds from './components/Thresholds';
+import Login from './components/Login';
 
 function Sidebar() {
   const location = useLocation();
@@ -47,11 +48,33 @@ function Sidebar() {
 }
 
 function App() {
+  const [user, setUser] = React.useState(() => localStorage.getItem('auth_user') || null);
+
+  const handleLogin = (role) => {
+    localStorage.setItem('auth_user', role);
+    setUser(role);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth_user');
+    setUser(null);
+  };
+
+  if (!user) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   return (
     <Router>
       <div className="flex bg-background min-h-screen font-sans">
         <Sidebar />
-        <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen">
+        <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative">
+          <button 
+            onClick={handleLogout}
+            className="absolute top-6 right-8 text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors"
+          >
+            Logout
+          </button>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/upload" element={<PdfUpload />} />

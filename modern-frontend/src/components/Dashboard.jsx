@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { evaluateIEEE } from '../utils/ieeeStandard';
 import { Trash2, Download, Search } from 'lucide-react';
 
 export default function Dashboard() {
@@ -31,7 +32,7 @@ export default function Dashboard() {
     }
   };
 
-  const columns = ["substation", "transformer", "sampleDate", "h2", "ch4", "c2h6", "c2h4", "c2h2", "co", "co2", "dga", "recommended"];
+  const columns = ["substation", "transformer", "sampleDate", "ieee_status", "h2", "ch4", "c2h6", "c2h4", "c2h2", "co", "co2", "dga", "recommended"];
 
   return (
     <div className="space-y-6">
@@ -71,15 +72,46 @@ export default function Dashboard() {
               ) : samples.length === 0 ? (
                 <tr><td colSpan={columns.length + 1} className="p-8 text-center text-slate-500">No samples found. Import a PDF to get started.</td></tr>
               ) : (
-                samples.map(sample => (
+                samples.map(sample => {
+                  const ieee = evaluateIEEE(sample);
+                  return (
                   <tr key={sample.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-                    {columns.map(col => (
-                      <td key={col} className="p-4 text-slate-700 whitespace-nowrap">
-                        {col.includes('Date') && sample[col] 
-                          ? new Date(sample[col]).toLocaleDateString() 
-                          : sample[col] || '-'}
-                      </td>
-                    ))}
+                    {columns.map(col => {
+                      if (col === 'ieee_status') {
+                        return (
+                          <td key={col} className="p-4 whitespace-nowrap">
+                            <div className="flex flex-col gap-1 items-start">
+                              <span className={`px-3 py-1 border rounded-full text-xs font-semibold ${ieee.meta.color}`}>
+                                {ieee.meta.label}
+                              </span>
+                              {ieee.condition >= 2 && ieee.exceededGases.length > 0 && (
+                                <span className="text-[10px] text-slate-500 font-medium max-w-[120px] truncate" title={`High: ${ieee.exceededGases.join(', ')}`}>
+                                  High: {ieee.exceededGases.join(', ')}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                        );
+                      }
+                      
+                      const isGas = ['h2', 'ch4', 'c2h6', 'c2h4', 'c2h2', 'co', 'co2'].includes(col);
+                      const isCritical = isGas && sample[col] > ieee.limits95[col];
+                      const isElevated = isGas && sample[col] > ieee.limits90[col] && !isCritical;
+                      
+                      let cellColor = 'text-slate-700';
+                      if (isCritical) cellColor = 'text-red-700 font-bold bg-red-100 px-2 py-1 rounded';
+                      else if (isElevated) cellColor = 'text-amber-700 font-bold bg-amber-50 px-2 py-1 rounded';
+
+                      return (
+                        <td key={col} className={`p-4 whitespace-nowrap ${isGas ? 'font-mono' : ''}`}>
+                          <span className={cellColor}>
+                            {col.includes('Date') && sample[col] 
+                              ? new Date(sample[col]).toLocaleDateString() 
+                              : sample[col] || '-'}
+                          </span>
+                        </td>
+                      );
+                    })}
                     <td className="p-4 text-right">
                       <button 
                         onClick={() => handleDelete(sample.id)}
@@ -89,7 +121,7 @@ export default function Dashboard() {
                       </button>
                     </td>
                   </tr>
-                ))
+                )})
               )}
             </tbody>
           </table>
