@@ -133,6 +133,30 @@ app.delete('/api/samples/:id', async (req, res) => {
     }
 });
 
+app.put('/api/samples/:id', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const data = { ...req.body };
+        // Parse dates if present
+        if (data.sampleDate) data.sampleDate = new Date(data.sampleDate);
+        if (data.analysisDate) data.analysisDate = new Date(data.analysisDate);
+        if (data.retestDate) data.retestDate = new Date(data.retestDate);
+        
+        // Remove id from payload if present
+        delete data.id;
+        delete data.createdAt;
+        delete data.updatedAt;
+
+        const updated = await prisma.sample.update({
+            where: { id },
+            data
+        });
+        res.json(updated);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // --- Thresholds Endpoints ---
 app.get('/api/thresholds', async (req, res) => {
     try {
