@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Sample {
+  id               Int       @id @default(autoincrement())
+  substation       String?
+  transformer      String?
+  voltage          String?
+  sampleDate       DateTime?
+  analysisDate     DateTime?
+  
+  o2               Float?
+  n2               Float?
+  o2_n2_ratio      Float?
+  h2               Float?
+  co2              Float?
+  c2h4             Float?
+  c2h6             Float?
+  c2h2             Float?
+  ch4              Float?
+  co               Float?
+  
+  resultOfAnalysis String?
+  dga              String?
+  recommended      String?
+  retestDate       DateTime?
+  
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Threshold {
+  id         Int    @id @default(autoincrement())
+  gas        String @unique
+  lo90       Float  // 90th percentile <= 0.2
+  lo95       Float  // 95th percentile <= 0.2
+  hi90       Float  // 90th percentile > 0.2
+  hi95       Float  // 95th percentile > 0.2
+}

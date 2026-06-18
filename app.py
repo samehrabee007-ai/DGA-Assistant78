@@ -62,7 +62,7 @@ with tab1:
     else:
         extracted = {}
     row = {c: extracted.get(c,"") for c in template_cols if c not in ["O2/N2","تاريخ إعادة التحليل"]}
-    edited_row = st.experimental_data_editor(pd.DataFrame([row]), num_rows="dynamic", use_container_width=True, key="single")
+    edited_row = st.data_editor(pd.DataFrame([row]), num_rows="dynamic", use_container_width=True, key="single")
     if len(edited_row):
         r = edited_row.iloc[0].to_dict()
         r["O2/N2"] = compute_o2n2(r)
@@ -87,7 +87,7 @@ with tab2:
             st.error(f"Error: {e}"); df = pd.DataFrame(columns=template_cols)
     else:
         df = pd.DataFrame(columns=template_cols)
-    edited = st.experimental_data_editor(df, num_rows="dynamic", use_container_width=True, height=400)
+    edited = st.data_editor(df, num_rows="dynamic", use_container_width=True, height=400)
     if len(edited):
         edited["O2/N2"] = edited.apply(lambda r: compute_o2n2(r), axis=1)
         edited["تاريخ إعادة التحليل"] = edited.apply(lambda r: retest_date(r), axis=1)

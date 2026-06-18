@@ -1,0 +1,11 @@
+{
+  "name": "dga-assistant",
+  "version": "1.0.0",
+  "description": "Full-Stack Application for DGA Analysis",
+  "scripts": {
+    "install:all": "npm install --prefix modern-backend && npm install --prefix modern-frontend",
+    "build:frontend": "npm run build --prefix modern-frontend",
+    "build:all": "npm run install:all && npm run build:frontend",
+    "start": "npm start --prefix modern-backend"
+  }
+}
