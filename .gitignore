@@ -1,9 +1,0 @@
-node_modules/
-dist/
-.env
-*.db
-*.db-journal
-__pycache__/
-*.xlsx
-.DS_Store
-data/
