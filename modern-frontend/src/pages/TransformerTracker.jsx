@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { Activity, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
-import { evaluateIEEE } from '../utils/ieeeStandard';
 
 export default function TransformerTracker() {
   const [transformers, setTransformers] = useState([]);
@@ -36,20 +35,12 @@ export default function TransformerTracker() {
     try {
       const res = await axios.get(`http://localhost:3001/api/transformers/history?substation=${encodeURIComponent(selectedSubstation)}&transformer=${encodeURIComponent(selectedTransformer)}`);
       
-      const formatted = res.data.map(item => {
-        const ieee = evaluateIEEE(item);
-        return {
-          ...item,
-          chartDate: item.sampleDate ? new Date(item.sampleDate).toLocaleDateString('en-GB') : 'Unknown',
-          o2_n2_ratio: item.o2_n2_ratio || (item.o2 && item.n2 ? parseFloat((item.o2 / item.n2).toFixed(2)) : 0),
-          ieeeCondition: ieee.condition,
-          ieeeMeta: ieee.meta,
-          exceededGases: ieee.exceededGases,
-          criticalGases: ieee.criticalGases,
-          isSealed: ieee.isSealed,
-          ieeeLimits: ieee.limits
-        };
-      });
+      // Format dates for charts
+      const formatted = res.data.map(item => ({
+        ...item,
+        chartDate: item.sampleDate ? new Date(item.sampleDate).toLocaleDateString() : 'Unknown',
+        o2_n2_ratio: item.o2_n2_ratio || (item.o2 && item.n2 ? parseFloat((item.o2 / item.n2).toFixed(2)) : 0)
+      }));
       setHistory(formatted);
     } catch (e) {
       console.error(e);
@@ -127,85 +118,13 @@ export default function TransformerTracker() {
               </div>
             </div>
             <div className="glass-panel p-6 flex items-center gap-4">
-              <div className={`${history[history.length - 1].ieeeCondition === 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'} p-3 rounded-full`}>
-                {history[history.length - 1].ieeeCondition === 1 ? <CheckCircle size={24}/> : <AlertTriangle size={24}/>}
+              <div className={`${history[history.length - 1].dga === 'Normal' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'} p-3 rounded-full`}>
+                {history[history.length - 1].dga === 'Normal' ? <CheckCircle size={24}/> : <AlertTriangle size={24}/>}
               </div>
               <div>
-                <p className="text-sm text-slate-500">IEEE 2019 Status</p>
-                <p className="text-xl font-bold text-slate-800">{history[history.length - 1].ieeeMeta.label}</p>
-                <p className={`text-sm font-semibold ${history[history.length - 1].ieeeMeta.color.replace('bg-', 'text-')}`}>
-                   {history[history.length - 1].ieeeMeta.description} 
-                   {history[history.length - 1].exceededGases.length > 0 && ` (${history[history.length - 1].exceededGases.join(', ')})`}
-                </p>
+                <p className="text-sm text-slate-500">Latest Status</p>
+                <p className="text-xl font-bold text-slate-800">{history[history.length - 1].dga || 'Unknown'}</p>
               </div>
-            </div>
-          </div>
-
-          <div className="flex justify-center mb-6">
-            <div className="glass-panel p-4 inline-block">
-              <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center justify-center gap-2">
-                <Activity size={16} className="text-primary" />
-                Reference Limits Table
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="w-max mx-auto text-center text-[11px] border-2 border-black border-collapse">
-                <thead>
-                  <tr>
-                    <th colSpan="8" className="border-2 border-black px-2 py-0.5 font-bold bg-white text-black">Normal Range</th>
-                  </tr>
-                  <tr className="bg-white text-black font-bold border-2 border-black">
-                    <th className="border-2 border-black px-2 py-0.5">O2/N2</th>
-                    <th className="border-2 border-black px-2 py-0.5">CO</th>
-                    <th className="border-2 border-black px-2 py-0.5">CH4</th>
-                    <th className="border-2 border-black px-2 py-0.5 bg-red-600 text-white">C2H2</th>
-                    <th className="border-2 border-black px-2 py-0.5">C2H6</th>
-                    <th className="border-2 border-black px-2 py-0.5">C2H4</th>
-                    <th className="border-2 border-black px-2 py-0.5">CO2</th>
-                    <th className="border-2 border-black px-2 py-0.5">H2</th>
-                  </tr>
-                </thead>
-                <tbody className="font-bold border-2 border-black">
-                  <tr className="bg-[#c2deb4] text-black border-b border-black">
-                    <td rowSpan="2" className="border-2 border-black px-2 py-0.5">&lt; 0.2</td>
-                    <td className="border border-black px-2 py-0.5">900</td>
-                    <td className="border border-black px-2 py-0.5">90</td>
-                    <td className="border border-black px-2 py-0.5">1</td>
-                    <td className="border border-black px-2 py-0.5">90</td>
-                    <td className="border border-black px-2 py-0.5">50</td>
-                    <td className="border border-black px-2 py-0.5">9000</td>
-                    <td className="border border-black px-2 py-0.5">80</td>
-                  </tr>
-                  <tr className="bg-[#c2deb4] text-black border-2 border-black">
-                    <td className="border border-black px-2 py-0.5">1100</td>
-                    <td className="border border-black px-2 py-0.5">150</td>
-                    <td className="border border-black px-2 py-0.5">2</td>
-                    <td className="border border-black px-2 py-0.5">175</td>
-                    <td className="border border-black px-2 py-0.5">100</td>
-                    <td className="border border-black px-2 py-0.5">12500</td>
-                    <td className="border border-black px-2 py-0.5">200</td>
-                  </tr>
-                  <tr className="bg-red-600 text-black border-b border-black">
-                    <td rowSpan="2" className="border-2 border-black px-2 py-0.5 text-white">&gt;= 0.2</td>
-                    <td className="border border-black px-2 py-0.5">500</td>
-                    <td className="border border-black px-2 py-0.5">20</td>
-                    <td className="border border-black px-2 py-0.5">2</td>
-                    <td className="border border-black px-2 py-0.5">15</td>
-                    <td className="border border-black px-2 py-0.5">50</td>
-                    <td className="border border-black px-2 py-0.5">5000</td>
-                    <td className="border border-black px-2 py-0.5">40</td>
-                  </tr>
-                  <tr className="bg-red-600 text-black border-2 border-black">
-                    <td className="border border-black px-2 py-0.5">600</td>
-                    <td className="border border-black px-2 py-0.5">50</td>
-                    <td className="border border-black px-2 py-0.5">7</td>
-                    <td className="border border-black px-2 py-0.5">40</td>
-                    <td className="border border-black px-2 py-0.5">100</td>
-                    <td className="border border-black px-2 py-0.5">7000</td>
-                    <td className="border border-black px-2 py-0.5">90</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
             </div>
           </div>
 
@@ -258,8 +177,8 @@ export default function TransformerTracker() {
                 <thead>
                   <tr className="border-b-2 border-slate-200">
                     <th className="py-3 px-4 font-semibold text-slate-600">Sample Date</th>
-                    <th className="py-3 px-4 font-semibold text-slate-600">IEEE 2019 Status</th>
-                    <th className="py-3 px-4 font-semibold text-slate-600">O2/N2 Ratio</th>
+                    <th className="py-3 px-4 font-semibold text-slate-600">DGA Status</th>
+                    <th className="py-3 px-4 font-semibold text-slate-600">O2/N2</th>
                     <th className="py-3 px-4 font-semibold text-slate-600">H2 (ppm)</th>
                     <th className="py-3 px-4 font-semibold text-slate-600">CO (ppm)</th>
                     <th className="py-3 px-4 font-semibold text-slate-600">Recommendation</th>
@@ -270,16 +189,13 @@ export default function TransformerTracker() {
                     <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                       <td className="py-3 px-4">{row.chartDate}</td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.ieeeMeta.color}`}>
-                          {row.ieeeMeta.label}
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.dga === 'Normal' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                          {row.dga || '-'}
                         </span>
-                        {row.exceededGases.length > 0 && (
-                           <span className="block mt-1 text-[10px] text-slate-500 font-medium">High: {row.exceededGases.join(', ')}</span>
-                        )}
                       </td>
-                      <td className="py-3 px-4 font-mono text-sm">{row.o2_n2_ratio} <span className="text-xs text-slate-400">({row.isSealed ? 'Sealed' : 'Breathing'})</span></td>
-                      <td className={`py-3 px-4 font-mono text-sm ${row.criticalGases?.includes('H2') ? 'text-red-700 font-bold bg-red-100' : row.exceededGases.includes('H2') ? 'text-amber-700 font-bold bg-amber-50' : ''}`}>{row.h2}</td>
-                      <td className={`py-3 px-4 font-mono text-sm ${row.criticalGases?.includes('CO') ? 'text-red-700 font-bold bg-red-100' : row.exceededGases.includes('CO') ? 'text-amber-700 font-bold bg-amber-50' : ''}`}>{row.co}</td>
+                      <td className="py-3 px-4 font-mono text-sm">{row.o2_n2_ratio}</td>
+                      <td className="py-3 px-4 font-mono text-sm">{row.h2}</td>
+                      <td className="py-3 px-4 font-mono text-sm">{row.co}</td>
                       <td className="py-3 px-4">{row.recommended || '-'}</td>
                     </tr>
                   ))}
