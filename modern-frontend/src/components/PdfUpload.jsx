@@ -20,7 +20,7 @@ export default function PdfUpload() {
     }
     
     try {
-      const res = await axios.post('http://localhost:3001/api/samples/upload-pdfs', formData);
+      const res = await axios.post('https://dga-backend-4d39.onrender.com/api/samples/upload-pdfs', formData);
       setResults(res.data);
     } catch (err) {
       setError(err.response?.data?.error || err.message);

@@ -8,7 +8,7 @@ export default function Dashboard() {
 
   const fetchSamples = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/samples');
+      const res = await axios.get('https://dga-backend-4d39.onrender.com/api/samples');
       setSamples(res.data);
     } catch (err) {
       console.error(err);
@@ -24,7 +24,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     if(!confirm('Are you sure you want to delete this sample?')) return;
     try {
-      await axios.delete(`http://localhost:3001/api/samples/${id}`);
+      await axios.delete(`https://dga-backend-4d39.onrender.com/api/samples/${id}`);
       setSamples(samples.filter(s => s.id !== id));
     } catch (err) {
       console.error(err);

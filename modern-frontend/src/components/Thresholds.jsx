@@ -17,7 +17,7 @@ export default function Thresholds() {
   ];
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/thresholds').then(res => {
+    axios.get('https://dga-backend-4d39.onrender.com/api/thresholds').then(res => {
       if (res.data.length > 0) {
         setThresholds(res.data);
       } else {
@@ -35,7 +35,7 @@ export default function Thresholds() {
 
   const handleSave = async () => {
     try {
-      await axios.post('http://localhost:3001/api/thresholds/bulk', { thresholds });
+      await axios.post('https://dga-backend-4d39.onrender.com/api/thresholds/bulk', { thresholds });
       alert('Thresholds saved successfully!');
     } catch (err) {
       console.error(err);

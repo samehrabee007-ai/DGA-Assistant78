@@ -23,7 +23,7 @@ export default function TransformerTracker() {
 
   const fetchTransformers = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/transformers/list');
+      const res = await axios.get('https://dga-backend-4d39.onrender.com/api/transformers/list');
       setTransformers(res.data);
     } catch (e) {
       console.error(e);
@@ -33,7 +33,7 @@ export default function TransformerTracker() {
   const fetchHistory = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:3001/api/transformers/history?substation=${encodeURIComponent(selectedSubstation)}&transformer=${encodeURIComponent(selectedTransformer)}`);
+      const res = await axios.get(`https://dga-backend-4d39.onrender.com/api/transformers/history?substation=${encodeURIComponent(selectedSubstation)}&transformer=${encodeURIComponent(selectedTransformer)}`);
       
       // Format dates for charts
       const formatted = res.data.map(item => ({
