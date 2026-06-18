@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dga-backend
+    env: node
+    rootDir: modern-backend
+    buildCommand: npm install && npx prisma generate
+    startCommand: node index.js
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PORT
+        value: 3001
