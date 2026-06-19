@@ -410,7 +410,7 @@ export default function Dashboard({ userRole }) {
                     )}
                   </th>
                 ))}
-                {userRole === 'admin' && <th className="px-2 py-3 font-semibold text-slate-600 text-right bg-slate-50 shadow-[0_1px_0_0_#e2e8f0]">Actions</th>}
+                {userRole === 'admin' && <th className="px-2 py-3 font-semibold text-slate-600 text-center bg-slate-50 shadow-[0_1px_0_0_#e2e8f0]">Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -474,8 +474,8 @@ export default function Dashboard({ userRole }) {
                       }
                       if (col === 'ieee_status') {
                         return (
-                          <td key={col} className="px-2 py-3 whitespace-nowrap">
-                            <div className="flex flex-col gap-1 items-start">
+                          <td key={col} className="px-2 py-3 whitespace-nowrap text-center">
+                            <div className="flex flex-col gap-1 items-center justify-center">
                               <span className={`px-3 py-1 border rounded-full text-xs font-semibold ${ieee.meta.color}`}>
                                 {ieee.meta.label}
                               </span>
@@ -494,9 +494,9 @@ export default function Dashboard({ userRole }) {
                         
                         const isOverdue = nextDate < new Date();
                         return (
-                          <td key={col} className={`px-2 py-3 whitespace-nowrap font-semibold ${isOverdue ? 'text-red-600 bg-red-50/50' : 'text-emerald-600'}`}>
+                          <td key={col} className={`px-2 py-3 whitespace-nowrap text-center font-semibold ${isOverdue ? 'text-red-600 bg-red-50/50' : 'text-emerald-600'}`}>
                             {nextDate.toLocaleDateString('en-GB')}
-                            {isOverdue && <span className="block mt-1 text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full w-max">Overdue</span>}
+                            {isOverdue && <span className="block mt-1 text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full w-max mx-auto">Overdue</span>}
                           </td>
                         );
                       }
@@ -510,7 +510,7 @@ export default function Dashboard({ userRole }) {
                       else if (isElevated) cellColor = 'text-amber-700 font-bold bg-amber-50';
 
                       return (
-                        <td key={col} className={`px-2 py-3 whitespace-nowrap ${isGas ? 'font-mono' : ''} ${cellColor}`} dir={col.includes('Date') ? "ltr" : "auto"}>
+                        <td key={col} className={`px-2 py-3 whitespace-nowrap text-center ${isGas ? 'font-mono' : ''} ${cellColor}`} dir={col.includes('Date') ? "ltr" : "auto"}>
                           {col.includes('Date') && sample[col] 
                             ? new Date(sample[col]).toLocaleDateString('en-GB') 
                             : sample[col] || '-'}
@@ -518,8 +518,8 @@ export default function Dashboard({ userRole }) {
                       );
                     })}
                     {userRole === 'admin' && (
-                      <td className="px-2 py-3 text-right">
-                        <div className="flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                      <td className="px-2 py-3 text-center">
+                        <div className="flex items-center gap-2 justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                            <button onClick={() => handleEditClick(sample)} className="text-blue-500 hover:text-blue-700 bg-blue-50 p-1.5 rounded" title="Edit sample">
                              <Edit2 size={16} />
                            </button>
