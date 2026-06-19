@@ -153,7 +153,7 @@ export default function ExecutiveDashboard() {
   }
 
   return (
-    <div className="space-y-6 bg-[#F5F7FA] min-h-screen -m-8 p-8 font-sans">
+    <div className="space-y-6 bg-[#F5F7FA] min-h-[calc(100vh-2rem)] md:min-h-screen -m-4 sm:-m-6 md:-m-8 p-4 sm:p-6 md:p-8 font-sans">
       
       {/* Header Panel */}
       <div className="bg-[#2563EB] text-white p-4 rounded-xl shadow-lg flex flex-col md:flex-row justify-between items-center">
@@ -280,16 +280,16 @@ export default function ExecutiveDashboard() {
         /* Single Asset Dashboard */
         <div className="space-y-4 animate-fade-in">
           {/* Asset Navigation & Actions */}
-          <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm border border-slate-200">
-            <div className="flex items-center gap-4">
-              <button onClick={() => setSelectedTransformer('')} className="text-sm font-bold text-slate-500 hover:text-blue-600 flex items-center gap-1">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-3 rounded-lg shadow-sm border border-slate-200">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+              <button onClick={() => setSelectedTransformer('')} className="text-sm font-bold text-slate-500 hover:text-blue-600 flex items-center gap-1 shrink-0">
                 ← Back to Fleet
               </button>
-              <h2 className="text-xl font-bold text-slate-800 border-l pl-4 border-slate-300">
+              <h2 className="text-lg md:text-xl font-bold text-slate-800 sm:border-l sm:pl-4 sm:border-slate-300 w-full truncate">
                 {selectedSubstation} / <span className="text-blue-600">{selectedTransformer}</span>
               </h2>
             </div>
-            <button className="flex items-center gap-2 bg-[#2563EB] hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-bold transition-colors shadow-sm">
+            <button className="flex items-center justify-center gap-2 bg-[#2563EB] hover:bg-blue-700 text-white px-4 py-2 sm:py-1.5 rounded-lg text-sm font-bold transition-colors shadow-sm w-full sm:w-auto">
               <FileText size={16}/> Generate Report PDF
             </button>
           </div>

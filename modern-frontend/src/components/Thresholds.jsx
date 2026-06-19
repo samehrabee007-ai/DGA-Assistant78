@@ -45,11 +45,11 @@ export default function Thresholds() {
 
   return (
     <div className="space-y-8 pb-12 font-sans" dir="rtl">
-      <div className="flex justify-between items-center" dir="ltr">
-        <button onClick={handleSave} className="btn-primary flex items-center gap-2">
+      <div className="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-4" dir="ltr">
+        <button onClick={handleSave} className="btn-primary flex justify-center items-center gap-2 w-full sm:w-auto">
            حفظ التعديلات <Save size={18} />
         </button>
-        <h1 className="text-3xl font-bold text-slate-800">IEEE 2019 & Thresholds</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-800">IEEE 2019 & Thresholds</h1>
       </div>
 
       {/* Editable Thresholds Section */}

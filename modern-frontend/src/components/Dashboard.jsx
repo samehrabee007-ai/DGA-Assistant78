@@ -192,18 +192,18 @@ export default function Dashboard({ userRole }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-slate-800">Samples Database</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Samples Database</h1>
         {userRole === 'admin' && (
-          <button className="btn-secondary">
+          <button className="btn-secondary w-full sm:w-auto justify-center">
             <Download size={18} />
             Export to Excel
           </button>
         )}
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 mb-2">
-        <div className="glass-panel p-4 inline-block">
+      <div className="flex flex-col xl:flex-row flex-wrap justify-center gap-4 mb-2">
+        <div className="glass-panel p-4 w-full xl:w-auto overflow-hidden">
           <h3 className="text-sm font-semibold text-slate-800 mb-1 flex items-center justify-center gap-2">
             <Activity size={16} className="text-primary" />
             IEEE C57.104-2019 (Screening Limits)
@@ -270,7 +270,7 @@ export default function Dashboard({ userRole }) {
           </div>
         </div>
 
-        <div className="glass-panel p-4 inline-block">
+        <div className="glass-panel p-4 w-full xl:w-auto overflow-hidden">
           <h3 className="text-sm font-semibold text-slate-800 mb-1 flex items-center justify-center gap-2">
             <Activity size={16} className="text-primary" />
             IEEE Gas Condition Limits
@@ -303,21 +303,23 @@ export default function Dashboard({ userRole }) {
       </div>
 
       <div className="glass-panel overflow-hidden">
-        <div className="p-4 border-b flex gap-4 items-center bg-white/50">
-          <Search className="text-slate-400" size={20} />
-          <input 
-            type="text" 
-            placeholder="Search samples..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none text-slate-700 placeholder:text-slate-400"
-          />
-          <div className="flex items-center gap-2 border-l border-slate-200 pl-4">
-            <span className="text-sm font-medium text-slate-500">Status:</span>
+        <div className="p-4 border-b flex flex-col md:flex-row gap-4 items-start md:items-center bg-white/50">
+          <div className="flex items-center gap-4 w-full md:w-auto flex-1">
+            <Search className="text-slate-400 shrink-0" size={20} />
+            <input 
+              type="text" 
+              placeholder="Search samples..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 bg-transparent border-none outline-none text-slate-700 placeholder:text-slate-400 w-full"
+            />
+          </div>
+          <div className="flex items-center justify-between w-full md:w-auto gap-2 md:border-l md:border-slate-200 md:pl-4 pt-2 md:pt-0 border-t border-slate-200 md:border-t-0">
+            <span className="text-sm font-medium text-slate-500 shrink-0">Status:</span>
             <select 
               value={statusFilter} 
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-white border border-slate-300 rounded-md text-sm p-1.5 outline-none focus:ring-2 focus:ring-primary/20 text-slate-700"
+              className="bg-white border border-slate-300 rounded-md text-sm p-1.5 outline-none focus:ring-2 focus:ring-primary/20 text-slate-700 w-full md:w-auto"
             >
               <option value="All">All Statuses</option>
               <option value="Normal">Normal (1)</option>
