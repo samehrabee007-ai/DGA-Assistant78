@@ -328,7 +328,7 @@ export default function Dashboard({ userRole }) {
         </div>
         
         <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-320px)] border border-slate-200 rounded-lg">
-          <table className="w-max text-center text-xs border-collapse relative mx-auto">
+          <table className="w-full text-center text-xs border-collapse relative">
             <thead className="sticky top-0 z-10 bg-slate-100 shadow-sm">
               <tr className="border-b border-slate-300">
                 {columns.map(col => (
