@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Trash2, Download, Search, Activity, ArrowUpDown, Filter, SortAsc, SortDesc, Edit2, Save, X } from 'lucide-react';
+import { Trash2, Download, Search, Activity, ArrowUpDown, Filter, SortAsc, SortDesc, Edit2, Save, X, FileText } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import { evaluateIEEE } from '../utils/ieeeStandard';
 
 const calculateNextDate = (sampleDate, recommended) => {
@@ -188,6 +191,93 @@ export default function Dashboard({ userRole }) {
     }
   };
 
+  const exportToExcel = () => {
+    const dataToExport = processedSamples.map(sample => {
+      const ieee = evaluateIEEE(sample);
+      let ratio = sample.o2_n2_ratio;
+      if (!ratio && sample.o2 && sample.n2) {
+        ratio = (sample.o2 / sample.n2).toFixed(2);
+      } else if (ratio) {
+        ratio = parseFloat(ratio).toFixed(2);
+      }
+      return {
+        Substation: sample.substation || '-',
+        Transformer: sample.transformer || '-',
+        Age: sample.transformerAge || '-',
+        'Sample Date': sample.sampleDate ? new Date(sample.sampleDate).toLocaleDateString('en-GB') : '-',
+        'Analysis Date': sample.analysisDate ? new Date(sample.analysisDate).toLocaleDateString('en-GB') : '-',
+        'CO (ppm)': sample.co || '-',
+        'CH4 (ppm)': sample.ch4 || '-',
+        'C2H2 (ppm)': sample.c2h2 || '-',
+        'C2H6 (ppm)': sample.c2h6 || '-',
+        'C2H4 (ppm)': sample.c2h4 || '-',
+        'CO2 (ppm)': sample.co2 || '-',
+        'H2 (ppm)': sample.h2 || '-',
+        'O2/N2 Ratio': ratio || '-',
+        'N2 (ppm)': sample.n2 || '-',
+        'O2 (ppm)': sample.o2 || '-',
+        'IEEE Status': ieee.meta.label,
+        'DGA Status': sample.dga || '-',
+        'Fault (Result)': sample.resultOfAnalysis || '-',
+        'Recommendation': sample.recommended || '-',
+        'Next Analysis Date': calculateNextDate(sample.sampleDate, sample.recommended) ? calculateNextDate(sample.sampleDate, sample.recommended).toLocaleDateString('en-GB') : '-'
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Samples");
+    XLSX.writeFile(workbook, "DGA_Samples.xlsx");
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF('landscape');
+    
+    doc.setFontSize(16);
+    doc.text('DGA Samples Database', 14, 15);
+    doc.setFontSize(10);
+    doc.text(`Generated on: ${new Date().toLocaleDateString('en-GB')}`, 14, 22);
+
+    const tableColumn = ["Substation", "Transformer", "Date", "CO", "CH4", "C2H2", "C2H6", "C2H4", "CO2", "H2", "O2/N2", "Status"];
+    const tableRows = [];
+
+    processedSamples.forEach(sample => {
+      const ieee = evaluateIEEE(sample);
+      let ratio = sample.o2_n2_ratio;
+      if (!ratio && sample.o2 && sample.n2) {
+        ratio = (sample.o2 / sample.n2).toFixed(2);
+      } else if (ratio) {
+        ratio = parseFloat(ratio).toFixed(2);
+      }
+      
+      const sampleData = [
+        sample.substation || '-',
+        sample.transformer || '-',
+        sample.sampleDate ? new Date(sample.sampleDate).toLocaleDateString('en-GB') : '-',
+        sample.co || '-',
+        sample.ch4 || '-',
+        sample.c2h2 || '-',
+        sample.c2h6 || '-',
+        sample.c2h4 || '-',
+        sample.co2 || '-',
+        sample.h2 || '-',
+        ratio || '-',
+        ieee.meta.label
+      ];
+      tableRows.push(sampleData);
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 25,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [37, 99, 235] }
+    });
+
+    doc.save('DGA_Samples.pdf');
+  };
+
   const columns = ["substation", "transformer", "transformerAge", "sampleDate", "analysisDate", "co", "ch4", "c2h2", "c2h6", "c2h4", "co2", "h2", "o2_n2_ratio", "n2", "o2", "ieee_status", "dga", "resultOfAnalysis", "recommended", "nextAnalysisDate"];
 
   return (
@@ -195,10 +285,16 @@ export default function Dashboard({ userRole }) {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Samples Database</h1>
         {userRole === 'admin' && (
-          <button className="btn-secondary w-full sm:w-auto justify-center">
-            <Download size={18} />
-            Export to Excel
-          </button>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <button onClick={exportToExcel} className="btn-secondary w-full sm:w-auto justify-center">
+              <Download size={18} />
+              Excel
+            </button>
+            <button onClick={exportToPDF} className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm w-full sm:w-auto">
+              <FileText size={18} />
+              PDF
+            </button>
+          </div>
         )}
       </div>
 
