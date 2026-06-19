@@ -34,8 +34,8 @@ def extract_from_pdf(pdf_bytes: bytes):
     result["c2h2"]= _search_num(all_text, r"C2H2\s*[:=]?\s*([0-9,\.]+)")
     result["ch4"] = _search_num(all_text, r"CH4\s*[:=]?\s*([0-9,\.]+)")
     result["co"]  = _search_num(all_text, r"(?<!CO2)\bCO\s*[:=]?\s*([0-9,\.]+)")
-    result["resultOfAnalysis"] = _search_text(all_text, [r"Result\s*of\s*analysis\s*[:\-]?\s*(.+)", r"النتيجة\s*[:\-]?\s*(.+)"])
-    result["dga"] = _search_text(all_text, [r"\bDGA\s*[:\-]?\s*([A-Z0-9\-]+)"])
+    result["resultOfAnalysis"] = _search_text(all_text, [r"Result\s*of\s*analysis\s*[:\-]?\s*(.+)", r"النتيجة\s*[:\-]?\s*(.+)", r"\b(T[1-3]|D[1-2]|PD|DT|N)\b(?!\s*:)"])
+    result["dga"] = _search_text(all_text, [r"\bDGA\s*[:\-]?\s*([A-Z0-9\-]+)", r"\b(S[1-3])\b"])
     result["recommended"] = _search_text(all_text, [r"Recommended\s*[:\-]?\s*(R[1-9])", r"التوصية\s*[:\-]?\s*(R[1-9])"])
     return result
 

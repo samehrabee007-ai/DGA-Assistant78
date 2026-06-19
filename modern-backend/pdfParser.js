@@ -42,9 +42,9 @@ async function extractWithGemini(pdfBuffer) {
         "c2h2": number (C2H2 value in ppm),
         "ch4": number (CH4 value in ppm),
         "co": number (CO value in ppm, careful not to confuse with CO2),
-        "resultOfAnalysis": "string (النتيجة / Result of analysis)",
-        "dga": "string (e.g. Normal, DGA-1, etc)",
-        "recommended": "string (التوصية / Recommended, e.g. R1, R3, R6, R12)"
+        "resultOfAnalysis": "string (Evaluation / Fault Codes / Result of analysis. Extract the short code like T1, T2, T3, D1, D2, PD, DT, or N)",
+        "dga": "string (Detection / DGA codes. Extract the short code like S1, S2, or S3)",
+        "recommended": "string (التوصية / Recommended / Action Codes, e.g. R1, R3, R6, R12)"
     }`;
 
     const pdfPart = {
