@@ -187,7 +187,7 @@ export default function Dashboard({ userRole }) {
     }
   };
 
-  const columns = ["substation", "transformer", "sampleDate", "h2", "ch4", "c2h6", "c2h4", "c2h2", "co", "o2_n2_ratio", "ieee_status", "dga", "resultOfAnalysis", "recommended", "nextAnalysisDate"];
+  const columns = ["substation", "transformer", "sampleDate", "co", "ch4", "c2h2", "c2h6", "c2h4", "co2", "h2", "o2_n2_ratio", "n2", "o2", "ieee_status", "dga", "resultOfAnalysis", "recommended", "nextAnalysisDate"];
 
   return (
     <div className="space-y-6">
@@ -437,7 +437,7 @@ export default function Dashboard({ userRole }) {
                            return (
                              <td key={col} className="p-1 border-x border-slate-100">
                                <input 
-                                 type={isDate ? 'date' : ['h2', 'ch4', 'c2h6', 'c2h4', 'c2h2', 'co', 'co2'].includes(col) ? 'number' : 'text'}
+                                 type={isDate ? 'date' : ['h2', 'ch4', 'c2h6', 'c2h4', 'c2h2', 'co', 'co2', 'n2', 'o2'].includes(col) ? 'number' : 'text'}
                                  value={editFormData[col] || ''}
                                  onChange={(e) => handleEditChange(col, e.target.value)}
                                  className="w-full text-[11px] p-1 border border-blue-200 rounded outline-none focus:border-blue-500 bg-white"
