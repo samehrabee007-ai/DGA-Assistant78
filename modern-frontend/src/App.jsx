@@ -7,15 +7,15 @@ import TransformerTracker from './pages/TransformerTracker';
 import Thresholds from './components/Thresholds';
 import Login from './components/Login';
 
-function Sidebar() {
+function Sidebar({ userRole }) {
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
 
   const links = [
     { name: 'Dashboard', path: '/', icon: <Database size={20} /> },
-    { name: 'Import PDF', path: '/upload', icon: <FileText size={20} /> },
+    ...(userRole === 'admin' ? [{ name: 'Import PDF', path: '/upload', icon: <FileText size={20} /> }] : []),
     { name: 'Tracker', path: '/tracker', icon: <Server size={20} /> },
-    { name: 'Thresholds', path: '/thresholds', icon: <Settings size={20} /> },
+    ...(userRole === 'admin' ? [{ name: 'Thresholds', path: '/thresholds', icon: <Settings size={20} /> }] : []),
   ];
 
   return (
@@ -67,19 +67,23 @@ function App() {
   return (
     <Router>
       <div className="flex bg-background min-h-screen font-sans">
-        <Sidebar />
+        <Sidebar userRole={user} />
         <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative">
           <button 
             onClick={handleLogout}
             className="absolute top-6 right-8 text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors"
           >
-            Logout
+            Logout ({user})
           </button>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/upload" element={<PdfUpload />} />
             <Route path="/tracker" element={<TransformerTracker />} />
-            <Route path="/thresholds" element={<Thresholds />} />
+            {user === 'admin' && (
+              <>
+                <Route path="/upload" element={<PdfUpload />} />
+                <Route path="/thresholds" element={<Thresholds />} />
+              </>
+            )}
           </Routes>
         </main>
       </div>

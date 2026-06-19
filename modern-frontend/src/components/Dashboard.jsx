@@ -195,7 +195,8 @@ export default function Dashboard({ userRole }) {
         <h1 className="text-3xl font-bold text-slate-800">Samples Database</h1>
         {userRole === 'admin' && (
           <button className="btn-secondary">
-            <Download size={18} /> Export to CSV
+            <Download size={18} />
+            Export to Excel
           </button>
         )}
       </div>
