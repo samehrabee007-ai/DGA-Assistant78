@@ -144,9 +144,9 @@ export default function TransformerTracker() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-            {/* O2/N2 Ratio Chart */}
+            {/* CO Trend Chart */}
             <div className="glass-panel p-6">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">O2/N2 Ratio Trend</h3>
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Carbon Monoxide (CO) Trend (ppm)</h3>
               <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={history}>
@@ -155,8 +155,7 @@ export default function TransformerTracker() {
                     <YAxis />
                     <Tooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                     <Legend />
-                    <ReferenceLine y={0.2} stroke="red" strokeDasharray="3 3" label="Threshold" />
-                    <Line type="monotone" dataKey="o2_n2_ratio" stroke="#0ea5e9" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} name="O2 / N2" />
+                    <Line type="monotone" dataKey="co" stroke="#0ea5e9" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} name="CO" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
