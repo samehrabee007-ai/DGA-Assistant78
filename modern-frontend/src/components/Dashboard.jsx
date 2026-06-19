@@ -334,14 +334,14 @@ export default function Dashboard({ userRole }) {
                 {columns.map(col => (
                   <th 
                     key={col} 
-                    className="px-1.5 py-2 text-center font-bold text-slate-700 capitalize whitespace-normal leading-tight min-w-[60px] max-w-[120px] bg-slate-100 border-x border-slate-200 relative break-words"
+                    className="px-1 py-2 text-center font-bold text-[11px] text-slate-700 capitalize whitespace-normal leading-tight bg-slate-100 border-x border-slate-200 relative break-words"
                   >
                     <div 
-                      className="flex flex-col items-center justify-center gap-1 cursor-pointer select-none group"
+                      className="flex flex-col items-center justify-center gap-0.5 cursor-pointer select-none group"
                       onClick={() => handleOpenDropdown(col)}
                     >
-                      <div className="flex items-center gap-1 justify-center">
-                        <span>{col === 'ieee_status' ? 'IEEE 2019 Status' : col === 'o2_n2_ratio' ? 'O2 / N2' : col === 'nextAnalysisDate' ? 'Next Analysis' : col === 'dga' ? 'Detection (DGA)' : col === 'resultOfAnalysis' ? 'Fault Code' : col === 'recommended' ? 'Recommended' : col.replace(/([A-Z])/g, ' $1').trim()}</span>
+                      <div className="flex items-center gap-0.5 justify-center">
+                        <span>{col === 'ieee_status' ? 'IEEE Status' : col === 'o2_n2_ratio' ? 'O2/N2' : col === 'nextAnalysisDate' ? 'Next Date' : col === 'dga' ? 'DGA' : col === 'resultOfAnalysis' ? 'Fault' : col === 'recommended' ? 'Rec.' : col.replace(/([A-Z])/g, ' $1').trim()}</span>
                         <div className="flex flex-col opacity-50">
                           <Filter size={10} className={`transition-opacity ${columnFilters[col] ? 'text-primary opacity-100' : 'text-slate-400 opacity-0 group-hover:opacity-100'}`} />
                           {sortConfig.key === col && <ArrowUpDown size={10} className="text-primary mt-0.5" />}
