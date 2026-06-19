@@ -36,11 +36,18 @@ export default function TransformerTracker() {
       const res = await axios.get(`https://dga-backend-4d39.onrender.com/api/transformers/history?substation=${encodeURIComponent(selectedSubstation)}&transformer=${encodeURIComponent(selectedTransformer)}`);
       
       // Format dates for charts
-      const formatted = res.data.map(item => ({
-        ...item,
-        chartDate: item.sampleDate ? new Date(item.sampleDate).toLocaleDateString() : 'Unknown',
-        o2_n2_ratio: item.o2_n2_ratio || (item.o2 && item.n2 ? parseFloat((item.o2 / item.n2).toFixed(2)) : 0)
-      }));
+      const formatted = res.data.map(item => {
+        let chartDateStr = 'Unknown';
+        if (item.sampleDate) {
+          const d = new Date(item.sampleDate);
+          chartDateStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+        }
+        return {
+          ...item,
+          chartDate: chartDateStr,
+          o2_n2_ratio: item.o2_n2_ratio || (item.o2 && item.n2 ? parseFloat((item.o2 / item.n2).toFixed(2)) : 0)
+        };
+      });
       setHistory(formatted);
     } catch (e) {
       console.error(e);
