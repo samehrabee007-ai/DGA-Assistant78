@@ -13,6 +13,7 @@ model Sample {
   substation       String?
   transformer      String?
   voltage          String?
+  transformerAge   String?
   sampleDate       DateTime?
   analysisDate     DateTime?
   

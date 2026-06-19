@@ -29,6 +29,7 @@ async function extractWithGemini(pdfBuffer) {
     {
         "substation": "string (المحطة / Substation)",
         "transformer": "string (المحول / Transformer)",
+        "transformerAge": "string or number (عمر المحول / Transformer Age)",
         "voltage": "string (الجهد / Voltage)",
         "sampleDate": "string (تاريخ العينة / Sample Date, format: YYYY-MM-DD or DD/MM/YYYY)",
         "analysisDate": "string (تاريخ التحليل / Analysis Date, format: YYYY-MM-DD or DD/MM/YYYY)",

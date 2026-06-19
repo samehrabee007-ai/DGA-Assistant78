@@ -155,6 +155,7 @@ export default function Dashboard({ userRole }) {
     setEditingId(sample.id);
     const formData = { ...sample };
     if (formData.sampleDate) formData.sampleDate = new Date(formData.sampleDate).toISOString().split('T')[0];
+    if (formData.analysisDate) formData.analysisDate = new Date(formData.analysisDate).toISOString().split('T')[0];
     setEditFormData(formData);
   };
 
@@ -187,7 +188,7 @@ export default function Dashboard({ userRole }) {
     }
   };
 
-  const columns = ["substation", "transformer", "sampleDate", "co", "ch4", "c2h2", "c2h6", "c2h4", "co2", "h2", "o2_n2_ratio", "n2", "o2", "ieee_status", "dga", "resultOfAnalysis", "recommended", "nextAnalysisDate"];
+  const columns = ["substation", "transformer", "transformerAge", "sampleDate", "analysisDate", "co", "ch4", "c2h2", "c2h6", "c2h4", "co2", "h2", "o2_n2_ratio", "n2", "o2", "ieee_status", "dga", "resultOfAnalysis", "recommended", "nextAnalysisDate"];
 
   return (
     <div className="space-y-6">
@@ -341,7 +342,7 @@ export default function Dashboard({ userRole }) {
                       onClick={() => handleOpenDropdown(col)}
                     >
                       <div className="flex items-center gap-0.5 justify-center">
-                        <span>{col === 'ieee_status' ? 'IEEE Status' : col === 'o2_n2_ratio' ? 'O2/N2' : col === 'nextAnalysisDate' ? 'Next Date' : col === 'dga' ? 'DGA' : col === 'resultOfAnalysis' ? 'Fault' : col === 'recommended' ? 'Rec.' : col.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <span>{col === 'ieee_status' ? 'IEEE Status' : col === 'o2_n2_ratio' ? 'O2/N2' : col === 'nextAnalysisDate' ? 'Next Date' : col === 'analysisDate' ? 'Analysis Date' : col === 'transformerAge' ? 'Age' : col === 'dga' ? 'DGA' : col === 'resultOfAnalysis' ? 'Fault' : col === 'recommended' ? 'Rec.' : col.replace(/([A-Z])/g, ' $1').trim()}</span>
                         <div className="flex flex-col opacity-50">
                           <Filter size={10} className={`transition-opacity ${columnFilters[col] ? 'text-primary opacity-100' : 'text-slate-400 opacity-0 group-hover:opacity-100'}`} />
                           {sortConfig.key === col && <ArrowUpDown size={10} className="text-primary mt-0.5" />}
