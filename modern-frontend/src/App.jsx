@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Activity, FileText, Settings, Database, Server, List } from 'lucide-react';
+import { Activity, FileText, Settings, Database, Server, LogOut } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import PdfUpload from './components/PdfUpload';
 import TransformerTracker from './pages/TransformerTracker';
 import Thresholds from './components/Thresholds';
 import Login from './components/Login';
 
-function Sidebar({ userRole }) {
+function Sidebar({ userRole, onLogout }) {
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
 
@@ -40,8 +40,17 @@ function Sidebar({ userRole }) {
           </Link>
         ))}
       </nav>
-      <div className="p-4 text-xs text-center text-slate-400 border-t border-white/10">
-        v2.0 Modern Edition
+      <div className="p-4 border-t border-white/10 space-y-4">
+        <button 
+          onClick={onLogout}
+          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 font-semibold"
+        >
+          <LogOut size={18} />
+          تسجيل الخروج
+        </button>
+        <div className="text-xs text-center text-slate-400">
+          v2.0 Modern Edition
+        </div>
       </div>
     </div>
   );
@@ -67,14 +76,8 @@ function App() {
   return (
     <Router>
       <div className="flex bg-background min-h-screen font-sans">
-        <Sidebar userRole={user} />
+        <Sidebar userRole={user} onLogout={handleLogout} />
         <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative">
-          <button 
-            onClick={handleLogout}
-            className="absolute top-6 right-8 text-sm font-semibold text-slate-500 hover:text-red-500 transition-colors"
-          >
-            Logout ({user})
-          </button>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/tracker" element={<TransformerTracker />} />
