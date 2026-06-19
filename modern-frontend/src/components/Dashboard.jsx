@@ -334,7 +334,7 @@ export default function Dashboard({ userRole }) {
                 {columns.map(col => (
                   <th 
                     key={col} 
-                    className="px-2 py-3 font-semibold text-slate-600 capitalize whitespace-nowrap bg-slate-50 shadow-[0_1px_0_0_#e2e8f0] relative"
+                    className="px-2 py-2 text-center font-semibold text-slate-600 capitalize whitespace-nowrap bg-slate-50 shadow-[0_1px_0_0_#e2e8f0] relative"
                   >
                     <div 
                       className="flex items-center justify-center gap-2 cursor-pointer select-none group"
@@ -410,7 +410,7 @@ export default function Dashboard({ userRole }) {
                     )}
                   </th>
                 ))}
-                {userRole === 'admin' && <th className="px-2 py-3 font-semibold text-slate-600 text-center bg-slate-50 shadow-[0_1px_0_0_#e2e8f0]">Actions</th>}
+                {userRole === 'admin' && <th className="px-2 py-2 text-center font-semibold text-slate-600 bg-slate-50 shadow-[0_1px_0_0_#e2e8f0]">Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -427,7 +427,7 @@ export default function Dashboard({ userRole }) {
                        <tr key={sample.id} className="border-b border-slate-100 bg-blue-50/50">
                          {columns.map(col => {
                            if (['ieee_status', 'o2_n2_ratio', 'nextAnalysisDate'].includes(col)) {
-                             return <td key={col} className="px-2 py-3 text-slate-400 text-xs">-</td>;
+                             return <td key={col} className="px-2 py-1.5 text-center text-slate-400 text-xs">-</td>;
                            }
                            const isDate = col.includes('Date');
                            return (
@@ -442,13 +442,15 @@ export default function Dashboard({ userRole }) {
                            )
                          })}
                          {userRole === 'admin' && (
-                           <td className="px-2 py-3 text-right flex gap-2 justify-end">
-                              <button onClick={handleSaveEdit} className="text-emerald-600 hover:text-emerald-800 p-1.5 bg-white rounded shadow-sm border border-emerald-100" title="Save">
-                                <Save size={16}/>
-                              </button>
-                              <button onClick={handleCancelEdit} className="text-slate-500 hover:text-slate-700 p-1.5 bg-white rounded shadow-sm border border-slate-200" title="Cancel">
-                                <X size={16}/>
-                              </button>
+                           <td className="px-2 py-1.5 text-center">
+                              <div className="flex gap-2 justify-center">
+                                <button onClick={handleSaveEdit} className="text-emerald-600 hover:text-emerald-800 p-1 bg-white rounded shadow-sm border border-emerald-100" title="Save">
+                                  <Save size={16}/>
+                                </button>
+                                <button onClick={handleCancelEdit} className="text-slate-500 hover:text-slate-700 p-1 bg-white rounded shadow-sm border border-slate-200" title="Cancel">
+                                  <X size={16}/>
+                                </button>
+                              </div>
                            </td>
                          )}
                        </tr>
@@ -466,17 +468,17 @@ export default function Dashboard({ userRole }) {
                           ratio = parseFloat(ratio).toFixed(2);
                         }
                         return (
-                          <td key={col} className="px-2 py-3 whitespace-nowrap font-mono text-sm text-slate-700">
+                          <td key={col} className="px-2 py-1.5 text-center whitespace-nowrap font-mono text-sm text-slate-700">
                             {ratio || '-'} 
-                            {ratio && <span className="block text-[10px] text-slate-400 mt-1">({ieee.isSealed ? 'Sealed' : 'Breathing'})</span>}
+                            {ratio && <span className="block text-[10px] text-slate-400">({ieee.isSealed ? 'Sealed' : 'Breathing'})</span>}
                           </td>
                         );
                       }
                       if (col === 'ieee_status') {
                         return (
-                          <td key={col} className="px-2 py-3 whitespace-nowrap text-center">
-                            <div className="flex flex-col gap-1 items-center justify-center">
-                              <span className={`px-3 py-1 border rounded-full text-xs font-semibold ${ieee.meta.color}`}>
+                          <td key={col} className="px-2 py-1.5 text-center whitespace-nowrap">
+                            <div className="flex flex-col gap-0.5 items-center justify-center">
+                              <span className={`px-2 py-0.5 border rounded-full text-xs font-semibold ${ieee.meta.color}`}>
                                 {ieee.meta.label}
                               </span>
                               {ieee.condition >= 2 && ieee.exceededGases.length > 0 && (
@@ -490,13 +492,15 @@ export default function Dashboard({ userRole }) {
                       }
                       if (col === 'nextAnalysisDate') {
                         const nextDate = calculateNextDate(sample.sampleDate, sample.recommended);
-                        if (!nextDate) return <td key={col} className="px-2 py-3 whitespace-nowrap text-slate-500">-</td>;
+                        if (!nextDate) return <td key={col} className="px-2 py-1.5 text-center whitespace-nowrap text-slate-500">-</td>;
                         
                         const isOverdue = nextDate < new Date();
                         return (
-                          <td key={col} className={`px-2 py-3 whitespace-nowrap text-center font-semibold ${isOverdue ? 'text-red-600 bg-red-50/50' : 'text-emerald-600'}`}>
-                            {nextDate.toLocaleDateString('en-GB')}
-                            {isOverdue && <span className="block mt-1 text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full w-max mx-auto">Overdue</span>}
+                          <td key={col} className={`px-2 py-1.5 text-center whitespace-nowrap font-semibold ${isOverdue ? 'text-red-600 bg-red-50/50' : 'text-emerald-600'}`}>
+                            <div className="flex flex-col items-center justify-center">
+                              <span>{nextDate.toLocaleDateString('en-GB')}</span>
+                              {isOverdue && <span className="text-[9px] bg-red-100 text-red-700 px-1.5 rounded-full w-max">Overdue</span>}
+                            </div>
                           </td>
                         );
                       }
@@ -510,7 +514,7 @@ export default function Dashboard({ userRole }) {
                       else if (isElevated) cellColor = 'text-amber-700 font-bold bg-amber-50';
 
                       return (
-                        <td key={col} className={`px-2 py-3 whitespace-nowrap text-center ${isGas ? 'font-mono' : ''} ${cellColor}`} dir={col.includes('Date') ? "ltr" : "auto"}>
+                        <td key={col} className={`px-2 py-1.5 text-center whitespace-nowrap text-sm ${isGas ? 'font-mono' : ''} ${cellColor}`} dir={col.includes('Date') ? "ltr" : "auto"}>
                           {col.includes('Date') && sample[col] 
                             ? new Date(sample[col]).toLocaleDateString('en-GB') 
                             : sample[col] || '-'}
@@ -518,12 +522,12 @@ export default function Dashboard({ userRole }) {
                       );
                     })}
                     {userRole === 'admin' && (
-                      <td className="px-2 py-3 text-center">
-                        <div className="flex items-center gap-2 justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                           <button onClick={() => handleEditClick(sample)} className="text-blue-500 hover:text-blue-700 bg-blue-50 p-1.5 rounded" title="Edit sample">
+                      <td className="px-2 py-1.5 text-center">
+                        <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <button onClick={() => handleEditClick(sample)} className="text-blue-500 hover:text-blue-700 bg-blue-50 p-1 rounded" title="Edit sample">
                              <Edit2 size={16} />
                            </button>
-                           <button onClick={() => handleDelete(sample.id)} className="text-red-500 hover:text-red-700 bg-red-50 p-1.5 rounded" title="Delete sample">
+                           <button onClick={() => handleDelete(sample.id)} className="text-red-500 hover:text-red-700 bg-red-50 p-1 rounded" title="Delete sample">
                              <Trash2 size={16} />
                            </button>
                         </div>
