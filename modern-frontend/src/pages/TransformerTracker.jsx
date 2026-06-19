@@ -189,28 +189,42 @@ export default function TransformerTracker() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b-2 border-slate-200">
-                    <th className="py-3 px-4 font-semibold text-slate-600">Sample Date</th>
-                    <th className="py-3 px-4 font-semibold text-slate-600">DGA Status</th>
-                    <th className="py-3 px-4 font-semibold text-slate-600">O2/N2</th>
-                    <th className="py-3 px-4 font-semibold text-slate-600">H2 (ppm)</th>
-                    <th className="py-3 px-4 font-semibold text-slate-600">CO (ppm)</th>
-                    <th className="py-3 px-4 font-semibold text-slate-600">Recommendation</th>
+                  <tr className="border-b-2 border-slate-200 text-sm">
+                    <th className="py-3 px-2 font-semibold text-slate-600">Sample Date</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">CO</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">CH4</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">C2H2</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">C2H6</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">C2H4</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">CO2</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">H2</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">O2/N2</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">N2</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">O2</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">DGA Status</th>
+                    <th className="py-3 px-2 font-semibold text-slate-600">Recommendation</th>
                   </tr>
                 </thead>
                 <tbody>
                   {history.map((row, idx) => (
-                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                      <td className="py-3 px-4">{row.chartDate}</td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.dga === 'Normal' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition-colors text-sm">
+                      <td className="py-2 px-2 whitespace-nowrap">{row.chartDate}</td>
+                      <td className="py-2 px-2 font-mono">{row.co ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.ch4 ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.c2h2 ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.c2h6 ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.c2h4 ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.co2 ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.h2 ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.o2_n2_ratio ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.n2 ?? '-'}</td>
+                      <td className="py-2 px-2 font-mono">{row.o2 ?? '-'}</td>
+                      <td className="py-2 px-2">
+                        <span className={`px-2 py-1 rounded-full text-[11px] font-medium ${row.dga === 'Normal' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                           {row.dga || '-'}
                         </span>
                       </td>
-                      <td className="py-3 px-4 font-mono text-sm">{row.o2_n2_ratio}</td>
-                      <td className="py-3 px-4 font-mono text-sm">{row.h2}</td>
-                      <td className="py-3 px-4 font-mono text-sm">{row.co}</td>
-                      <td className="py-3 px-4">{row.recommended || '-'}</td>
+                      <td className="py-2 px-2 whitespace-nowrap">{row.recommended || '-'}</td>
                     </tr>
                   ))}
                 </tbody>
