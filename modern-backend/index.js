@@ -68,6 +68,7 @@ app.post('/api/samples', async (req, res) => {
         if (data.sampleDate) data.sampleDate = new Date(data.sampleDate);
         if (data.analysisDate) data.analysisDate = new Date(data.analysisDate);
         if (data.retestDate) data.retestDate = new Date(data.retestDate);
+        if (data.transformerAge !== undefined && data.transformerAge !== null) data.transformerAge = String(data.transformerAge);
 
         const sample = await prisma.sample.create({ data });
         res.json(sample);
@@ -110,6 +111,7 @@ app.post('/api/samples/upload-pdfs', upload.array('pdfs', 50), async (req, res) 
                     if (payload.sampleDate) payload.sampleDate = new Date(payload.sampleDate);
                     if (payload.analysisDate) payload.analysisDate = new Date(payload.analysisDate);
                     if (payload.retestDate) payload.retestDate = new Date(payload.retestDate);
+                    if (payload.transformerAge !== undefined && payload.transformerAge !== null) payload.transformerAge = String(payload.transformerAge);
 
                     const sample = await prisma.sample.create({ data: payload });
                     results.push({ fileName: file.originalname, status: 'Success', id: sample.id, data: record });
@@ -141,6 +143,7 @@ app.put('/api/samples/:id', async (req, res) => {
         if (data.sampleDate) data.sampleDate = new Date(data.sampleDate);
         if (data.analysisDate) data.analysisDate = new Date(data.analysisDate);
         if (data.retestDate) data.retestDate = new Date(data.retestDate);
+        if (data.transformerAge !== undefined && data.transformerAge !== null) data.transformerAge = String(data.transformerAge);
         
         // Remove id from payload if present
         delete data.id;
