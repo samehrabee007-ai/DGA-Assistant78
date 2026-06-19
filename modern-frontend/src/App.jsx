@@ -4,6 +4,7 @@ import { Activity, FileText, Settings, Database, Server, LogOut } from 'lucide-r
 import Dashboard from './components/Dashboard';
 import PdfUpload from './components/PdfUpload';
 import TransformerTracker from './pages/TransformerTracker';
+import ExecutiveDashboard from './pages/ExecutiveDashboard';
 import Thresholds from './components/Thresholds';
 import Login from './components/Login';
 
@@ -14,6 +15,7 @@ function Sidebar({ userRole, onLogout }) {
   const links = [
     { name: 'Dashboard', path: '/', icon: <Database size={20} /> },
     ...(userRole === 'admin' ? [{ name: 'Import PDF', path: '/upload', icon: <FileText size={20} /> }] : []),
+    { name: 'Executive Dashboard', path: '/executive-dashboard', icon: <Activity size={20} /> },
     { name: 'Tracker', path: '/tracker', icon: <Server size={20} /> },
     ...(userRole === 'admin' ? [{ name: 'Thresholds', path: '/thresholds', icon: <Settings size={20} /> }] : []),
   ];
@@ -80,6 +82,7 @@ function App() {
         <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative">
           <Routes>
             <Route path="/" element={<Dashboard userRole={user} />} />
+            <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
             <Route path="/tracker" element={<TransformerTracker />} />
             {user === 'admin' && (
               <>
