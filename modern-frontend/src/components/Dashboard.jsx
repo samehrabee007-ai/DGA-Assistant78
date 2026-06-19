@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Trash2, Download, Search, Activity, ArrowUpDown, Filter, SortAsc, SortDesc, Edit2, Save, X, FileText } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { evaluateIEEE } from '../utils/ieeeStandard';
 
 const calculateNextDate = (sampleDate, recommended) => {
@@ -267,7 +267,7 @@ export default function Dashboard({ userRole }) {
       tableRows.push(sampleData);
     });
 
-    doc.autoTable({
+    autoTable(doc, {
       head: [tableColumn],
       body: tableRows,
       startY: 25,
