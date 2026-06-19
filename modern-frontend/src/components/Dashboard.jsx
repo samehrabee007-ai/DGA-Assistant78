@@ -230,9 +230,27 @@ export default function Dashboard({ userRole }) {
     XLSX.writeFile(workbook, "DGA_Samples.xlsx");
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     const doc = new jsPDF('landscape');
     
+    try {
+      const fontUrl = '/fonts/Amiri-Regular.ttf';
+      const fontResponse = await fetch(fontUrl);
+      const fontBuffer = await fontResponse.arrayBuffer();
+      const uint8Array = new Uint8Array(fontBuffer);
+      let binaryString = '';
+      for (let i = 0; i < uint8Array.length; i++) {
+        binaryString += String.fromCharCode(uint8Array[i]);
+      }
+      const fontBase64 = window.btoa(binaryString);
+      
+      doc.addFileToVFS('Amiri-Regular.ttf', fontBase64);
+      doc.addFont('Amiri-Regular.ttf', 'Amiri', 'normal');
+      doc.setFont('Amiri');
+    } catch (e) {
+      console.error("Could not load Arabic font", e);
+    }
+
     doc.setFontSize(16);
     doc.text('DGA Samples Database', 14, 15);
     doc.setFontSize(10);
@@ -271,8 +289,8 @@ export default function Dashboard({ userRole }) {
       head: [tableColumn],
       body: tableRows,
       startY: 25,
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [37, 99, 235] }
+      styles: { font: 'Amiri', fontSize: 8 },
+      headStyles: { fillColor: [37, 99, 235], font: 'Amiri' }
     });
 
     doc.save('DGA_Samples.pdf');
