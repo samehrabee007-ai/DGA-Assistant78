@@ -79,11 +79,11 @@ function App() {
         <Sidebar userRole={user} onLogout={handleLogout} />
         <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard userRole={user} />} />
             <Route path="/tracker" element={<TransformerTracker />} />
             {user === 'admin' && (
               <>
-                <Route path="/upload" element={<PdfUpload />} />
+                <Route path="/upload" element={<PdfUpload userRole={user} />} />
                 <Route path="/thresholds" element={<Thresholds />} />
               </>
             )}
